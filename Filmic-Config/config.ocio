@@ -1,0 +1,284 @@
+# Filmic Dynamic Range LUT configuration crafted by Troy James Sobotka with
+# special thanks and feedback from Guillermo, Claudio Rocha, Bassam Kurdali,
+# Eugenio Pignataro, Henri Hebeisen, Jason Clarke, Haarm-Peter Duiker, Thomas
+# Mansencal, and Timothy Lottes.
+# Modified 06/07/2021 by Saul Espinosa for OCIO v2.0 & Redshift 3.0
+
+ocio_profile_version: 2
+
+search_path: "luts:looks"
+environment: {}
+strictparsing: true
+
+description: A filmlike dynamic range
+
+file_rules:
+  - !<Rule> {name: albedo, colorspace: sRGB, regex: "[^a-zA-Z0-9]*([aA]lbedo|[dD]iffuse|[cC]olor|[bB]as.?ecolor).*"}
+  - !<Rule> {name: data, colorspace: Raw, regex: "[^a-zA-Z0-9]*([aA]ces|[nN]ormal|[mM]etal|[rR]ough|[hH]eight|[bB]ump|[dD]isplace|[iI]or|[rR]eflect|[sS]pec|[oO]pacity|[sS]ss|[gG]loss|[aA]mbient.?occlusion).*"}
+  - !<Rule> {name: exr, extension: exr, pattern: "*", colorspace: Raw}
+  - !<Rule> {name: hdr, extension: hdr, pattern: "*", colorspace: Raw}
+  - !<Rule> {name: tx, extension: tx, pattern: "*", colorspace: Raw}
+  - !<Rule> {name: png, extension: png, pattern: "*", colorspace: sRGB}
+  - !<Rule> {name: psd, extension: psd, pattern: "*", colorspace: sRGB}
+  - !<Rule> {name: jpeg, colorspace: sRGB, regex: ".*\\.[jJ]pe?g$"}
+  - !<Rule> {name: tiff, colorspace: sRGB, regex: ".*\\.[tT]if?f$"}
+  - !<Rule> {name: Default, colorspace: default}
+
+roles:
+  color_picking: sRGB
+  compositing_log: Filmic Log Encoding
+  color_timing: Filmic Log Encoding
+  data: Raw
+  default: sRGB
+  matte_paint: Filmic Log Encoding
+  reference: scene-linear Rec.709-sRGB
+  rendering: scene-linear Rec.709-sRGB
+  scene_linear: scene-linear Rec.709-sRGB
+  texture_paint: sRGB
+
+displays:
+  sRGB:
+  - !<View> {name: Filmic Base Contrast, colorspace: Filmic Log Encoding, look: +Base Contrast}
+  - !<View> {name: Filmic Very High Contrast, colorspace: Filmic Log Encoding, look: +Very High Contrast}
+  - !<View> {name: Filmic High Contrast, colorspace: Filmic Log Encoding, look: +High Contrast}
+  - !<View> {name: Filmic Medium High Contrast, colorspace: Filmic Log Encoding, look: +Medium High Contrast}
+  - !<View> {name: Filmic Medium Low Contrast, colorspace: Filmic Log Encoding, look: +Medium Low Contrast}
+  - !<View> {name: Filmic Low Contrast, colorspace: Filmic Log Encoding, look: +Low Contrast}
+  - !<View> {name: Filmic Very Low Contrast, colorspace: Filmic Log Encoding, look: +Very Low Contrast}
+  - !<View> {name: Filmic Log Encoding Base, colorspace: Filmic Log Encoding}
+  - !<View> {name: sRGB, colorspace: sRGB}
+  - !<View> {name: Greyscale, colorspace: Filmic Log Encoding, look: +Greyscale}
+  - !<View> {name: Filmic False Colour, colorspace: Filmic Log Encoding, look: +False Colour}
+  - !<View> {name: Raw, colorspace: Raw}
+  Display P3:
+    - !<View> {name: Filmic Base Contrast, colorspace: AppleP3 Filmic Log Encoding, look: +Base Contrast}
+    - !<View> {name: Filmic Very High Contrast, colorspace: AppleP3 Filmic Log Encoding, look: +Very High Contrast}
+    - !<View> {name: Filmic High Contrast, colorspace: AppleP3 Filmic Log Encoding, look: +High Contrast}
+    - !<View> {name: Filmic Medium High Contrast, colorspace: AppleP3 Filmic Log Encoding, look: +Medium High Contrast}
+    - !<View> {name: Filmic Medium Low Contrast, colorspace: AppleP3 Filmic Log Encoding, look: +Medium Low Contrast}
+    - !<View> {name: Filmic Very Low Contrast, colorspace: AppleP3 Filmic Log Encoding, look: +Very Low Contrast}
+    - !<View> {name: Filmic Low Contrast, colorspace: AppleP3 Filmic Log Encoding, look: +Low Contrast}
+    - !<View> {name: Filmic Log Encoding Base, colorspace: AppleP3 Filmic Log Encoding}
+    - !<View> {name: sRGB, colorspace: AppleP3 sRGB OETF}
+    - !<View> {name: Greyscale, colorspace: AppleP3 Filmic Log Encoding, look: +Greyscale}
+    - !<View> {name: Filmic False Colour, colorspace: AppleP3 Filmic Log Encoding, look: +False Colour}
+    - !<View> {name: Raw, colorspace: Raw}
+
+active_displays: [sRGB, Display P3]
+
+colorspaces:
+
+  - !<ColorSpace>
+    name: scene-linear Rec.709-sRGB
+    family: 
+    equalitygroup: ""
+    bitdepth: 32f
+    description: |
+      Linear sRGB
+    isdata: false
+    categories: [ file-io, working-space ]
+    encoding: scene-linear
+    allocation: lg2
+    allocationvars: [-12.473931188, 12.526068812]
+    
+  - !<ColorSpace>
+    name: sRGB
+    family: display
+    description: |
+      sRGB monitor (piecewise EOTF)
+    isdata: false
+    categories: [ file-io ]
+    encoding: sdr-video
+    from_scene_reference: !<GroupTransform>
+      children:
+        - !<ExponentWithLinearTransform> {gamma: 2.4, offset: 0.055, direction: inverse}
+        - !<RangeTransform> {min_in_value: 0., min_out_value: 0., max_in_value: 1., max_out_value: 1.}
+        
+  - !<ColorSpace>
+    name: AppleP3 sRGB OETF
+    family: display
+    equalitygroup:
+    bitdepth: 32f
+    description: |
+      sRGB specification display referred Optical-Electro Transfer Function with Apple DCI-P3 primaries.
+    isdata: false
+    allocation: uniform
+    allocationvars: [0.0, 1.0]
+    to_scene_reference: !<GroupTransform>
+      children:
+        - !<ColorSpaceTransform> {src: Apple DCI-P3 D65, dst: scene-linear Rec.709-sRGB}
+        - !<ExponentWithLinearTransform> {gamma: 2.4, offset: 0.055}
+
+  - !<ColorSpace>
+    name: Apple DCI-P3 D65
+    family:
+    equalitygroup: ""
+    isdata: false
+    categories: [ file-io ]
+    encoding: sdr-video
+    to_scene_reference: !<GroupTransform>
+      children:
+        - !<MatrixTransform> {matrix: [0.515121, 0.291977, 0.157104, 0, 0.241196, 0.692245, 0.0665741, 0, -0.00105286, 0.0418854, 0.784073, 0, 0, 0, 0, 1]}
+        - !<MatrixTransform> {matrix: [1.04788, 0.0229187, -0.0502014, 0, 0.0295868, 0.990479, -0.0170593, 0, -0.00923157, 0.0150757, 0.751678, 0, 0, 0, 0, 1], direction: inverse}
+        - !<MatrixTransform> {matrix: [0.412391, 0.357584, 0.180481, 0, 0.212639, 0.715169, 0.0721923, 0, 0.0193308, 0.119195, 0.950532, 0, 0, 0, 0, 1], direction: inverse}
+
+  - !<ColorSpace>
+    name: Filmic Log Encoding
+    family: Log
+    equalitygroup:
+    bitdepth: 32f
+    description: |
+      Log based filmic shaper with 16.5 stops of latitude, and 25 stops of dynamic range.
+    isdata: false
+    allocation: lg2
+    allocationvars: [-12.473931188, 12.526068812]
+    from_scene_reference: !<GroupTransform>
+        children:
+          - !<AllocationTransform> {allocation: lg2, vars: [-12.473931188, 12.526068812]}
+          - !<FileTransform> {src: desat65cube.spi3d, interpolation: best}
+          - !<AllocationTransform> {allocation: uniform, vars: [0, 0.66]}
+    to_scene_reference: !<AllocationTransform> {allocation: lg2, vars: [-12.473931188, 4.026068812], direction: inverse}
+
+  - !<ColorSpace>
+    name: AppleP3 Filmic Log Encoding
+    family: Log
+    equalitygroup:
+    bitdepth: 32f
+    description: |
+      Log based filmic shaper with 16.5 stops of latitude, and 25 stops of dynamic range with Apple P3 primaries.
+    isdata: false
+    allocation: lg2
+    allocationvars: [-12.473931188, 12.526068812]
+    from_scene_reference: !<GroupTransform>
+        children:
+          - !<ColorSpaceTransform> {src: scene-linear Rec.709-sRGB, dst: Filmic Log Encoding}
+          - !<ExponentTransform> {value: [2.2, 2.2, 2.2, 1.0]}
+          - !<ColorSpaceTransform> {src: scene-linear Rec.709-sRGB, dst: Apple DCI-P3 D65}
+          - !<ExponentTransform> {value: [2.2, 2.2, 2.2, 1.0], direction: inverse}
+    to_scene_reference: !<GroupTransform>
+        children:
+          - !<ExponentTransform> {value: [2.2, 2.2, 2.2, 1.0], direction: inverse}
+          - !<ColorSpaceTransform> {src: Apple DCI-P3 D65, dst: scene-linear Rec.709-sRGB}
+          - !<ExponentTransform> {value: [2.2, 2.2, 2.2, 1.0]}
+          - !<AllocationTransform> {allocation: lg2, vars: [-12.473931188, 4.026068812], direction: inverse}
+
+  - !<ColorSpace>
+    name: Raw
+    family: Data
+    equalitygroup: ""
+    bitdepth: 32f
+    description: |
+      Raw (no color processing)
+    isdata: true
+    categories: [ file-io ]
+    encoding: data
+
+  - !<ColorSpace>
+    name: ARRI LogC / AlexaWideGamut
+    family: Cameras/ARRI
+    description: |
+      Alexa-v3-LogC
+    isdata: false
+    categories: [ file-io ]
+    encoding: log
+    to_scene_reference: !<GroupTransform>
+        children:
+         - !<BuiltinTransform> {style: "ARRI_ALEXA-LOGC-EI800-AWG_to_ACES2065-1"}
+         - !<BuiltinTransform> {style: "UTILITY - ACES-AP0_to_CIE-XYZ-D65_BFD"}
+         - !<BuiltinTransform> {style: "DISPLAY - CIE-XYZ-D65_to_sRGB"}
+         - !<ExponentWithLinearTransform> {gamma: 2.4, offset: 0.055}
+         - !<RangeTransform> {min_in_value: 0., min_out_value: 0., max_in_value: 1., max_out_value: 1.}
+
+  - !<ColorSpace>
+    name: RED Log3G10 / REDWideGamutRGB
+    family: Cameras/RED
+    description: |
+      RED Log3G10 / REDWideGamutRGB
+    isdata: false
+    categories: [ file-io ]
+    encoding: log
+    to_scene_reference: !<GroupTransform>
+        children:
+         - !<BuiltinTransform> {style: "RED_LOG3G10-RWG_to_ACES2065-1"}
+         - !<BuiltinTransform> {style: "UTILITY - ACES-AP0_to_CIE-XYZ-D65_BFD"}
+         - !<BuiltinTransform> {style: "DISPLAY - CIE-XYZ-D65_to_sRGB"}
+         - !<ExponentWithLinearTransform> {gamma: 2.4, offset: 0.055}
+         - !<RangeTransform> {min_in_value: 0., min_out_value: 0., max_in_value: 1., max_out_value: 1.}
+
+  - !<ColorSpace>
+    name: Sony SLog3 / SGamut3
+    family: Cameras/Sony
+    description: |
+      Sony SLog3 / SGamut3
+    isdata: false
+    categories: [ file-io ]
+    encoding: log
+    to_scene_reference: !<GroupTransform>
+        children:
+         - !<BuiltinTransform> {style: "SONY_SLOG3-SGAMUT3_to_ACES2065-1"}
+         - !<BuiltinTransform> {style: "UTILITY - ACES-AP0_to_CIE-XYZ-D65_BFD"}
+         - !<BuiltinTransform> {style: "DISPLAY - CIE-XYZ-D65_to_sRGB"}
+         - !<ExponentWithLinearTransform> {gamma: 2.4, offset: 0.055}
+         - !<RangeTransform> {min_in_value: 0., min_out_value: 0., max_in_value: 1., max_out_value: 1.}
+
+  - !<ColorSpace>
+    name: Panasonic V-Log / V-Gamut
+    family: Cameras/Panasonic
+    description: |
+      Panasonic V-Log / V-Gamut
+    isdata: false
+    categories: [ file-io ]
+    encoding: log
+    to_scene_reference: !<GroupTransform>
+        children:
+         - !<BuiltinTransform> {style: "PANASONIC_VLOG-VGAMUT_to_ACES2065-1"}
+         - !<BuiltinTransform> {style: "UTILITY - ACES-AP0_to_CIE-XYZ-D65_BFD"}
+         - !<BuiltinTransform> {style: "DISPLAY - CIE-XYZ-D65_to_sRGB"}
+         - !<ExponentWithLinearTransform> {gamma: 2.4, offset: 0.055}
+         - !<RangeTransform> {min_in_value: 0., min_out_value: 0., max_in_value: 1., max_out_value: 1.}
+
+looks:
+  - !<Look>
+    name: Greyscale
+    process_space: Filmic Log Encoding
+    transform: !<MatrixTransform> {matrix: [0.2126729, 0.7151521, 0.0721750, 0, 0.2126729, 0.7151521, 0.0721750, 0, 0.2126729, 0.7151521, 0.0721750, 0, 0, 0, 0, 1]}
+
+  - !<Look>
+    name: False Colour
+    process_space: Filmic Log Encoding
+    transform: !<FileTransform> {src: Filmic_False_Colour.spi3d, interpolation: best}
+
+  - !<Look>
+    name: Very High Contrast
+    process_space: Filmic Log Encoding
+    transform: !<FileTransform> {src: Filmic_to_1.20_1-00.spi1d, interpolation: linear}
+
+  - !<Look>
+    name: High Contrast
+    process_space: Filmic Log Encoding
+    transform: !<FileTransform> {src: Filmic_to_0.99_1-0075.spi1d, interpolation: linear}
+
+  - !<Look>
+    name: Medium High Contrast
+    process_space: Filmic Log Encoding
+    transform: !<FileTransform> {src: Filmic_to_0-85_1-011.spi1d, interpolation: best}
+
+  - !<Look>
+    name: Base Contrast
+    process_space: Filmic Log Encoding
+    transform: !<FileTransform> {src: Filmic_to_0-70_1-03.spi1d, interpolation: linear}
+
+  - !<Look>
+    name: Medium Low Contrast
+    process_space: Filmic Log Encoding
+    transform: !<FileTransform> {src: Filmic_to_0-60_1-04.spi1d, interpolation: linear}
+
+  - !<Look>
+    name: Low Contrast
+    process_space: Filmic Log Encoding
+    transform: !<FileTransform> {src: Filmic_to_0-48_1-09.spi1d, interpolation: linear}
+
+  - !<Look>
+    name: Very Low Contrast
+    process_space: Filmic Log Encoding
+    transform: !<FileTransform> {src: Filmic_to_0-35_1-30.spi1d, interpolation: linear}
