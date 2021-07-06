@@ -1,0 +1,467 @@
+# Redshift OCIO config for ACES Workflows & File Filtering by Saul Espinosa
+# Version 1.3 - Modified 06/29/2021 - Added ACES 1.0 HDR/SDR-video Contrast Looks for sRGB, Rec.709, Rec.2020, Display-P3
+
+ocio_profile_version: 2
+
+description: ACES Ready File Filtered OCIO Configuration
+
+name: Redshift_3_0
+
+search_path: 
+
+environment: {}
+
+file_rules:
+  - !<Rule> {name: albedo, colorspace: sRGB, regex: ".*[^a-zA-Z0-9]([aA]lbedo|[dD]iffuse|[cC]olor|[bB]ase.?[cC]olor).*"}
+  - !<Rule> {name: data, colorspace: Raw, regex: ".*[^a-zA-Z0-9]([aA]ces|[nN]ormal|[mM]etal|[rR]ough|[hH]eight|[bB]ump|[dD]isplace|(ior|IOR)[^a-zA-Z]|[rR]eflect|[sS]pec|[oO]pacity|(sss|SSS)[^a-zA-Z]|[gG]loss|[aA]mbient.?[oO]cclusion|[aA][oO][^a-zA-Z]).*"}
+  - !<Rule> {name: logC, colorspace: ARRI LogC / AlexaWideGamut, pattern: "*LogC*", extension: "*"}
+  - !<Rule> {name: SLog3, colorspace: Sony SLog3 / SGamut3, pattern: "*SLog*", extension: "*"}
+  - !<Rule> {name: v-log, colorspace: Panasonic V-Log / V-Gamut, pattern: "*V-Log*", extension: "*"}
+  - !<Rule> {name: adx, colorspace: Log film scan (ADX10), pattern: "*adx*", extension: "*"}
+  - !<Rule> {name: exr, extension: exr, pattern: "*", colorspace: scene-linear Rec.709-sRGB}
+  - !<Rule> {name: hdr, extension: hdr, pattern: "*", colorspace: scene-linear Rec.709-sRGB}
+  - !<Rule> {name: tx, extension: tx, pattern: "*", colorspace: Raw}
+  - !<Rule> {name: png, extension: png, pattern: "*", colorspace: sRGB}
+  - !<Rule> {name: psd, extension: psd, pattern: "*", colorspace: sRGB}
+  - !<Rule> {name: jpeg, colorspace: sRGB, regex: ".*\\.[jJ]pe?g$"}
+  - !<Rule> {name: tiff, colorspace: sRGB, regex: ".*\\.[tT]if?f$"}
+  - !<Rule> {name: Default, colorspace: default}
+
+roles:
+  aces_interchange: ACES2065-1
+  cie_xyz_d65_interchange: CIE-XYZ D65
+  color_picking: scene-linear Rec.709-sRGB
+  color_timing: ACEScct
+  compositing_log: ACEScct
+  data: Raw
+  default: sRGB
+  matte_paint: ACEScct
+  reference: Raw
+  scene_linear: ACEScg
+  texture_paint: sRGB
+
+shared_views:
+  - !<View> {name: Log, colorspace: ACEScct}
+  - !<View> {name: Raw, colorspace: Raw}
+  - !<View> {name: Un-tone-mapped, view_transform: Un-tone-mapped, display_colorspace: <USE_DISPLAY_NAME>}
+# Base Views
+  - !<View> {name: ACES 1.0 SDR-video, view_transform: ACES 1.0 SDR-video, display_colorspace: <USE_DISPLAY_NAME>}
+  - !<View> {name: ACES 1.0 SDR-video - Rec.709, view_transform: ACES 1.0 SDR-video REC.709, display_colorspace: <USE_DISPLAY_NAME>}
+  - !<View> {name: ACES 1.0 SDR-video - Display-P3, view_transform: ACES 1.0 SDR-Video Display-P3, display_colorspace: <USE_DISPLAY_NAME>}
+  - !<View> {name: ACES 1.0 HDR-video - Rec.2020, view_transform: ACES HDR-Video 1000 nits & Rec.2020, display_colorspace: <USE_DISPLAY_NAME>}
+  - !<View> {name: ACES 1.0 HDR-video - Display-P3, view_transform: ACES HDR-Video 1000 nits & P3, display_colorspace: <USE_DISPLAY_NAME>}
+# SDR sRGB Looks Views
+  - !<View> {name: ACES 1.0 SDR - Low Contrast, view_transform: ACES 1.0 SDR-video, display_colorspace: <USE_DISPLAY_NAME>, look: +Low Contrast}
+  - !<View> {name: ACES 1.0 SDR - Medium Low Contrast, view_transform: ACES 1.0 SDR-video, display_colorspace: <USE_DISPLAY_NAME>, look: +Medium Low Contrast}
+  - !<View> {name: ACES 1.0 SDR - Very Low Contrast, view_transform: ACES 1.0 SDR-video, display_colorspace: <USE_DISPLAY_NAME>, look: +Very Low Contrast}
+  - !<View> {name: ACES 1.0 SDR - High Contrast, view_transform: ACES 1.0 SDR-video, display_colorspace: <USE_DISPLAY_NAME>, look: +High Contrast}
+  - !<View> {name: ACES 1.0 SDR - Medium High Contrast, view_transform: ACES 1.0 SDR-video, display_colorspace: <USE_DISPLAY_NAME>, look: +Medium High Contrast}
+  - !<View> {name: ACES 1.0 SDR - Very High Contrast, view_transform: ACES 1.0 SDR-video, display_colorspace: <USE_DISPLAY_NAME>, look: +Very High Contrast}
+# SDR Rec.709 Looks Views
+  - !<View> {name: ACES 1.0 SDR-video - Rec.709 - Low Contrast, view_transform: ACES 1.0 SDR-video REC.709, display_colorspace: <USE_DISPLAY_NAME>, look: +Low Contrast}
+  - !<View> {name: ACES 1.0 SDR-video - Rec.709 - Medium Low Contrast, view_transform: ACES 1.0 SDR-video REC.709, display_colorspace: <USE_DISPLAY_NAME>, look: +Medium Low Contrast}
+  - !<View> {name: ACES 1.0 SDR-video - Rec.709 - Very Low Contrast, view_transform: ACES 1.0 SDR-video REC.709, display_colorspace: <USE_DISPLAY_NAME>, look: +Very Low Contrast}
+  - !<View> {name: ACES 1.0 SDR-video - Rec.709 - High Contrast, view_transform: ACES 1.0 SDR-video REC.709, display_colorspace: <USE_DISPLAY_NAME>, look: +High Contrast}
+  - !<View> {name: ACES 1.0 SDR-video - Rec.709 - Medium High Contrast, view_transform: ACES 1.0 SDR-video REC.709, display_colorspace: <USE_DISPLAY_NAME>, look: +Medium High Contrast}
+  - !<View> {name: ACES 1.0 SDR-video - Rec.709 - Very High Contrast, view_transform: ACES 1.0 SDR-video REC.709, display_colorspace: <USE_DISPLAY_NAME>, look: +Very High Contrast}
+# SDR Display-P3 Looks Views
+  - !<View> {name: ACES 1.0 SDR-video - Display-P3 - Low Contrast, view_transform: ACES 1.0 SDR-Video Display-P3, display_colorspace: <USE_DISPLAY_NAME>, look: +Low Contrast}
+  - !<View> {name: ACES 1.0 SDR-video - Display-P3 - Medium Low Contrast, view_transform: ACES 1.0 SDR-Video Display-P3, display_colorspace: <USE_DISPLAY_NAME>, look: +Medium Low Contrast}
+  - !<View> {name: ACES 1.0 SDR-video - Display-P3 - Very Low Contrast, view_transform: ACES 1.0 SDR-Video Display-P3, display_colorspace: <USE_DISPLAY_NAME>, look: +Very Low Contrast}
+  - !<View> {name: ACES 1.0 SDR-video - Display-P3 - High Contrast, view_transform: ACES 1.0 SDR-Video Display-P3, display_colorspace: <USE_DISPLAY_NAME>, look: +High Contrast}
+  - !<View> {name: ACES 1.0 SDR-video - Display-P3 - Medium High Contrast, view_transform: ACES 1.0 SDR-Video Display-P3, display_colorspace: <USE_DISPLAY_NAME>, look: +Medium High Contrast}
+  - !<View> {name: ACES 1.0 SDR-video - Display-P3 - Very High Contrast, view_transform: ACES 1.0 SDR-Video Display-P3, display_colorspace: <USE_DISPLAY_NAME>, look: +Very High Contrast}
+# HDR Rec.2020 Looks Views
+  - !<View> {name: ACES 1.0 HDR-video - Rec.2020 - Low Contrast, view_transform: ACES HDR-Video 1000 nits & Rec.2020, display_colorspace: <USE_DISPLAY_NAME>, look: +Low Contrast}
+  - !<View> {name: ACES 1.0 HDR-video - Rec.2020 - Medium Low Contrast, view_transform: ACES HDR-Video 1000 nits & Rec.2020, display_colorspace: <USE_DISPLAY_NAME>, look: +Medium Low Contrast}
+  - !<View> {name: ACES 1.0 HDR-video - Rec.2020 - Very Low Contrast, view_transform: ACES HDR-Video 1000 nits & Rec.2020, display_colorspace: <USE_DISPLAY_NAME>, look: +Very Low Contrast}
+  - !<View> {name: ACES 1.0 HDR-video - Rec.2020 - High Contrast, view_transform: ACES HDR-Video 1000 nits & Rec.2020, display_colorspace: <USE_DISPLAY_NAME>, look: +High Contrast}
+  - !<View> {name: ACES 1.0 HDR-video - Rec.2020 - Medium High Contrast, view_transform: ACES HDR-Video 1000 nits & Rec.2020, display_colorspace: <USE_DISPLAY_NAME>, look: +Medium High Contrast}
+  - !<View> {name: ACES 1.0 HDR-video - Rec.2020 - Very High Contrast, view_transform: ACES HDR-Video 1000 nits & Rec.2020, display_colorspace: <USE_DISPLAY_NAME>, look: +Very High Contrast}
+# HDR Display-P3 Looks Views
+  - !<View> {name: ACES 1.0 HDR-video - Display-P3 - Low Contrast, view_transform: ACES HDR-Video 1000 nits & P3, display_colorspace: <USE_DISPLAY_NAME>, look: +Low Contrast}
+  - !<View> {name: ACES 1.0 HDR-video - Display-P3 - Medium Low Contrast, view_transform: ACES HDR-Video 1000 nits & P3, display_colorspace: <USE_DISPLAY_NAME>, look: +Medium Low Contrast}
+  - !<View> {name: ACES 1.0 HDR-video - Display-P3 - Very Low Contrast, view_transform: ACES HDR-Video 1000 nits & P3, display_colorspace: <USE_DISPLAY_NAME>, look: +Very Low Contrast}
+  - !<View> {name: ACES 1.0 HDR-video - Display-P3 - High Contrast, view_transform: ACES HDR-Video 1000 nits & P3, display_colorspace: <USE_DISPLAY_NAME>, look: +High Contrast}
+  - !<View> {name: ACES 1.0 HDR-video - Display-P3 - Medium High Contrast, view_transform: ACES HDR-Video 1000 nits & P3, display_colorspace: <USE_DISPLAY_NAME>, look: +Medium High Contrast}
+  - !<View> {name: ACES 1.0 HDR-video - Display-P3 - Very High Contrast, view_transform: ACES HDR-Video 1000 nits & P3, display_colorspace: <USE_DISPLAY_NAME>, look: +Very High Contrast}  
+
+displays:
+  sRGB:
+    - !<Views> [ ACES 1.0 SDR-video, ACES 1.0 SDR - Low Contrast, ACES 1.0 SDR - Medium Low Contrast, ACES 1.0 SDR - Very Low Contrast, ACES 1.0 SDR - High Contrast, ACES 1.0 SDR - Medium High Contrast, ACES 1.0 SDR - Very High Contrast, Un-tone-mapped, Log, Raw ]
+  Rec.709:
+    - !<Views> [ ACES 1.0 SDR-video - Rec.709, ACES 1.0 SDR-video - Rec.709 - Low Contrast, ACES 1.0 SDR-video - Rec.709 - Medium Low Contrast, ACES 1.0 SDR-video - Rec.709 - Very Low Contrast, ACES 1.0 SDR-video - Rec.709 - High Contrast, ACES 1.0 SDR-video - Rec.709 - Medium High Contrast, ACES 1.0 SDR-video - Rec.709 - Very High Contrast, Un-tone-mapped, Log, Raw ]
+  Display-P3:
+    - !<Views> [ ACES 1.0 SDR-video - Display-P3, ACES 1.0 SDR-video - Display-P3 - Low Contrast, ACES 1.0 SDR-video - Display-P3 - Medium Low Contrast, ACES 1.0 SDR-video - Display-P3 - Very Low Contrast, ACES 1.0 SDR-video - Display-P3 - High Contrast, ACES 1.0 SDR-video - Display-P3 - Medium High Contrast, ACES 1.0 SDR-video - Display-P3 - Very High Contrast, ACES 1.0 HDR-video - Display-P3, ACES 1.0 HDR-video - Display-P3 - Low Contrast, ACES 1.0 HDR-video - Display-P3 - Very Low Contrast, ACES 1.0 HDR-video - Display-P3 - High Contrast, ACES 1.0 HDR-video - Display-P3 - Medium High Contrast, ACES 1.0 HDR-video - Display-P3 - Very High Contrast, Un-tone-mapped, Log, Raw ]
+  Rec.2020:
+    - !<Views> [ ACES 1.0 HDR-video - Rec.2020, ACES 1.0 HDR-video - Rec.2020 - Low Contrast, ACES 1.0 HDR-video - Rec.2020 - Medium Low Contrast, ACES 1.0 HDR-video - Rec.2020 - Very Low Contrast, ACES 1.0 HDR-video - Rec.2020 - High Contrast, ACES 1.0 HDR-video - Rec.2020 - Medium High Contrast, ACES 1.0 HDR-video - Rec.2020 - Very High Contrast, Un-tone-mapped, Log, Raw ]
+
+default_view_transform: Un-tone-mapped
+
+view_transforms:
+
+  - !<ViewTransform>
+    name: Un-tone-mapped
+    description: |
+      Convert the scene colorimetry directly to display-referred with no tone-mapping.
+      This is often described as a "linear workflow." It is intended only for diagnostic purposes.
+    from_scene_reference: !<BuiltinTransform> {style: "UTILITY - ACES-AP0_to_CIE-XYZ-D65_BFD"}
+
+  - !<ViewTransform>
+    name: ACES 1.0 SDR-video
+    description: |
+      ACES Output Transform for SDR displays in a video viewing environment. ACES neutrals are at D65.
+    from_scene_reference: !<BuiltinTransform> {style: "ACES-OUTPUT - ACES2065-1_to_CIE-XYZ-D65 - SDR-VIDEO_1.0"}
+
+  - !<ViewTransform>
+    name: ACES 1.0 SDR-video REC.709
+    description: |
+      ACES Output Transform for SDR displays in a video viewing environment. ACES neutrals are at D65.
+    from_scene_reference: !<BuiltinTransform> {style: "ACES-OUTPUT - ACES2065-1_to_CIE-XYZ-D65 - SDR-VIDEO-REC709lim_1.1"}
+
+  - !<ViewTransform>
+    name: ACES 1.0 SDR-Video Display-P3
+    description: |
+      Component of ACES Output Transforms for SDR D65 video
+    from_scene_reference: !<BuiltinTransform> {style: ACES-OUTPUT - ACES2065-1_to_CIE-XYZ-D65 - SDR-VIDEO-P3lim_1.1}
+
+  - !<ViewTransform>
+    name: ACES HDR-Video 1000 nits & Rec.2020
+    description: |
+      Component of ACES Output Transforms for 1000 nit HDR D65 video
+    from_scene_reference: !<BuiltinTransform> {style: ACES-OUTPUT - ACES2065-1_to_CIE-XYZ-D65 - HDR-VIDEO-1000nit-15nit-REC2020lim_1.1}
+
+  - !<ViewTransform>
+    name: ACES HDR-Video 1000 nits & P3
+    description: |
+      Component of ACES Output Transforms for 1000 nit HDR D65 video
+    from_scene_reference: !<BuiltinTransform> {style: ACES-OUTPUT - ACES2065-1_to_CIE-XYZ-D65 - HDR-VIDEO-1000nit-15nit-P3lim_1.1}
+
+inactive_colorspaces: [ CIE-XYZ D65, Rec.709, Display-P3, Rec.2020 ]
+
+display_colorspaces:
+
+  - !<ColorSpace>
+    name: CIE-XYZ D65
+    family: 
+    description: |
+      Display connection space, CIE XYZ with D65 adopted white point
+    encoding: display-linear
+    isdata: false
+    categories:
+
+  - !<ColorSpace>
+    name: sRGB
+    family: 
+    description: |
+      sRGB monitor (piecewise EOTF)
+    isdata: false
+    categories: [ file-io ]
+    encoding: sdr-video
+    from_display_reference: !<GroupTransform>
+      children:
+         - !<BuiltinTransform> {style: DISPLAY - CIE-XYZ-D65_to_sRGB}
+         - !<RangeTransform> {min_in_value: 0., min_out_value: 0., max_in_value: 1., max_out_value: 1.}
+         
+  - !<ColorSpace>
+    name: Rec.709
+    family: Display
+    description: |
+      Gamma 2.2 monitor with Rec.709
+    isdata: false
+    categories: [ file-io ]
+    encoding: sdr-video
+    from_display_reference: !<GroupTransform>
+      children:
+         - !<BuiltinTransform> {style: "DISPLAY - CIE-XYZ-D65_to_REC.1886-REC.709"}
+         - !<RangeTransform> {min_in_value: 0., min_out_value: 0., max_in_value: 1., max_out_value: 1.}
+         
+  - !<ColorSpace>
+    name: Display-P3
+    family: Display
+    description: |
+      Apple Display P3 monitor with D65 white point and 2.2 gamma
+    isdata: false
+    categories: [ file-io ]
+    encoding: sdr-video
+    from_display_reference: !<GroupTransform>
+      children:
+        - !<BuiltinTransform> {style: DISPLAY - CIE-XYZ-D65_to_REC.1886-REC.2020}
+        - !<ExponentTransform> {value: [2.4, 2.4, 2.4, 1]}
+        - !<MatrixTransform> {matrix: [ 1.3435782525843325, -0.2821796705261359, -0.06139858205819615, 0, -0.06529745278911941, 1.0757879158485741, -0.010490463059454922, 0, 0.002821787261701055, -0.01959849452449417, 1.0167767072627931, 0, 0, 0, 0, 1 ]}
+        - !<ExponentTransform> {value: [0.45454545, 0.45454545, 0.45454545, 1]}
+        - !<RangeTransform> {min_in_value: 0., min_out_value: 0., max_in_value: 1., max_out_value: 1.}
+         
+  - !<ColorSpace>
+    name: Rec.2020
+    family: Display
+    description: |
+      Convert CIE XYZ (D65 white) to Rec.1886/Rec.2020 (UHD video)
+    isdata: false
+    categories: [ file-io ]
+    encoding: sdr-video
+    from_display_reference: !<BuiltinTransform> {style: "DISPLAY - CIE-XYZ-D65_to_REC.1886-REC.2020"}
+
+  - !<ColorSpace>
+    name: AdobeRGB
+    family: 
+    description: |
+      AdobeRGB
+    isdata: false
+    categories: [ file-io ]
+    encoding: sdr-video
+    from_display_reference: !<GroupTransform>
+      children:
+        - !<MatrixTransform> {matrix: [ 2.041587903811, -0.565006974279, -0.344731350778, 0, -0.969243636281, 1.875967501508, 0.041555057407, 0, 0.013444280632, -0.118362392231, 1.015174994391, 0, 0, 0, 0, 1 ]}
+        - !<ExponentTransform> {value: 2.19921875, direction: inverse}
+        - !<RangeTransform> {min_in_value: 0., min_out_value: 0., max_in_value: 1., max_out_value: 1.}
+
+colorspaces:
+  
+  # ACEScg is listed first to make default
+  - !<ColorSpace>
+    name: ACEScg
+    family: ACES
+    equalitygroup: ""
+    bitdepth: 32f
+    description: |
+      ACEScg working space
+    isdata: false
+    categories: [ file-io, working-space ]
+    encoding: scene-linear
+    to_scene_reference: !<MatrixTransform> {matrix: [ 0.695452241357, 0.140678696470, 0.163869062172, 0, 0.044794563372, 0.859671118456, 0.095534318172, 0, -0.005525882558, 0.004025210306, 1.001500672252, 0, 0, 0, 0, 1 ]}
+
+  - !<ColorSpace>
+    name: ACES2065-1
+    family: ACES
+    equalitygroup: ""
+    bitdepth: 32f
+    description: |
+      The Academy Color Encoding System reference color space
+    isdata: false
+    categories: [ file-io, working-space ]
+    encoding: scene-linear
+
+  - !<ColorSpace>
+    name: scene-linear Rec.709-sRGB
+    family: 
+    equalitygroup: ""
+    bitdepth: 32f
+    description: |
+      Scene-linear Rec.709 or sRGB primaries
+    isdata: false
+    categories: [ file-io, working-space ]
+    encoding: scene-linear
+    to_scene_reference: !<MatrixTransform> {matrix: [ 0.439632981919, 0.382988698152, 0.177378319929, 0, 0.089776442959, 0.813439428749, 0.096784128292, 0, 0.017541170383, 0.111546553302, 0.870912276314, 0, 0, 0, 0, 1 ]}
+
+  - !<ColorSpace>
+    name: scene-linear DCI-P3 D65
+    family: 
+    equalitygroup: ""
+    bitdepth: 32f
+    description: |
+      P3 primaries (D65 whitepoint) to ACES primaries
+    isdata: false
+    categories: [ file-io, working-space ]
+    encoding: scene-linear
+    to_scene_reference: !<MatrixTransform> {matrix: [ 0.518946170807, 0.286250382662, 0.194806188345, 0, 0.073861978948, 0.819847285748, 0.106291942298, 0, -0.000306552567, 0.043808195740, 0.956494748592, 0, 0, 0, 0, 1 ]}
+
+  - !<ColorSpace>
+    name: scene-linear Rec.2020
+    family: 
+    equalitygroup: ""
+    bitdepth: 32f
+    description: |
+      Scene-linear Rec 2020/UHDTV primaries to ACES2065-1
+    isdata: false
+    categories: [ file-io, working-space ]
+    encoding: scene-linear
+    to_scene_reference: !<MatrixTransform> {matrix: [ 0.679085634734, 0.157700914650, 0.163213450689, 0, 0.046002003035, 0.859054673009, 0.094943323917, 0, -0.000573943188, 0.028467768407, 0.972106174733, 0, 0, 0, 0, 1 ]}
+
+  - !<ColorSpace>
+    name: Raw
+    family: 
+    equalitygroup: ""
+    bitdepth: 32f
+    description: |
+      Raw (no color processing)
+    isdata: true
+    categories: [ file-io ]
+    encoding: data
+
+  - !<ColorSpace>
+    name: ACEScct
+    family: ACES
+    description: |
+      ACES log working space
+    isdata: false
+    categories: [ file-io ]
+    encoding: log
+    to_scene_reference: !<BuiltinTransform> {style: "ACEScct_to_ACES2065-1"}
+
+  - !<ColorSpace>
+    name: ARRI LogC / AlexaWideGamut
+    family: Cameras/ARRI
+    description: |
+      Alexa-v3-LogC-EI800 (SUP v3 color science)
+    isdata: false
+    categories: [ file-io ]
+    encoding: log
+    to_scene_reference: !<BuiltinTransform> {style: "ARRI_ALEXA-LOGC-EI800-AWG_to_ACES2065-1"}
+
+  - !<ColorSpace>
+    name: RED Log3G10 / REDWideGamutRGB
+    family: Cameras/RED
+    description: |
+      RED Log3G10 / REDWideGamutRGB
+    isdata: false
+    categories: [ file-io ]
+    encoding: log
+    to_scene_reference: !<BuiltinTransform> {style: "RED_LOG3G10-RWG_to_ACES2065-1"}
+
+  - !<ColorSpace>
+    name: Sony SLog3 / SGamut3
+    family: Cameras/Sony
+    description: |
+      Sony SLog3 / SGamut3
+    isdata: false
+    categories: [ file-io ]
+    encoding: log
+    to_scene_reference: !<BuiltinTransform> {style: "SONY_SLOG3-SGAMUT3_to_ACES2065-1"}
+
+  - !<ColorSpace>
+    name: Panasonic V-Log / V-Gamut
+    family: Cameras/Panasonic
+    description: |
+      Panasonic V-Log / V-Gamut
+    isdata: false
+    categories: [ file-io ]
+    encoding: log
+    to_scene_reference: !<BuiltinTransform> {style: "PANASONIC_VLOG-VGAMUT_to_ACES2065-1"}
+
+  - !<ColorSpace>
+    name: Log film scan (ADX10)
+    family: ACES
+    description: |
+      ADX10 Academy Density Exchange (10-bit printing density)
+    isdata: false
+    categories: [ file-io ]
+    encoding: log
+    to_scene_reference: !<BuiltinTransform> {style: "ADX10_to_ACES2065-1"}
+
+# Invert Utility File-IO Inputs    
+  - !<ColorSpace>
+    name: Invert ACES - sRGB
+    family: ACES/Utility
+    bitdepth: 32f
+    description: |
+      Utility - Invert ACES sRGB ODT
+    isdata: false
+    categories: [ file-io ]
+    encoding: sdr-video
+    to_scene_reference: !<DisplayViewTransform> {src: "ACES2065-1", display: "sRGB", view: "ACES 1.0 SDR-video", direction: inverse}
+    from_scene_reference: !<GroupTransform>
+      children:
+        - !<DisplayViewTransform> {src: "ACES2065-1", display: "sRGB", view: "ACES 1.0 SDR-video"}
+        - !<RangeTransform> {min_in_value: 0., min_out_value: 0., max_in_value: 1., max_out_value: 1.}
+        
+  - !<ColorSpace>
+    name: Invert ACES - Rec.709
+    family: ACES/Utility
+    bitdepth: 32f
+    description: |
+      Utility - Invert ACES Rec.709 ODT
+    isdata: false
+    categories: [ file-io ]
+    encoding: sdr-video
+    to_scene_reference: !<DisplayViewTransform> {src: "ACES2065-1", display: "Rec.709", view: "ACES 1.0 SDR-video - Rec.709", direction: inverse}
+    from_scene_reference: !<GroupTransform>
+      children:
+        - !<DisplayViewTransform> {src: "ACES2065-1", display: "Rec.709", view: "ACES 1.0 SDR-video - Rec.709"}
+        - !<RangeTransform> {min_in_value: 0., min_out_value: 0., max_in_value: 1., max_out_value: 1.}
+        
+  - !<ColorSpace>
+    name: Invert ACES - Display-P3
+    family: ACES/Utility
+    bitdepth: 32f
+    description: |
+      Utility - Invert ACES Display-P3 ODT
+    isdata: false
+    categories: [ file-io ]
+    encoding: sdr-video
+    to_scene_reference: !<DisplayViewTransform> {src: "ACES2065-1", display: "Display-P3", view: "ACES 1.0 SDR-video - Display-P3", direction: inverse}
+    from_scene_reference: !<GroupTransform>
+      children:
+        - !<DisplayViewTransform> {src: "ACES2065-1", display: "Display-P3", view: "ACES 1.0 SDR-video - Display-P3"}
+        - !<RangeTransform> {min_in_value: 0., min_out_value: 0., max_in_value: 1., max_out_value: 1.}
+        
+  - !<ColorSpace>
+    name: Invert ACES - Rec.2020
+    family: ACES/Utility
+    bitdepth: 32f
+    description: |
+      Utility - Invert ACES Rec.2020 ODT
+    isdata: false
+    categories: [ file-io ]
+    encoding: sdr-video
+    to_scene_reference: !<DisplayViewTransform> {src: "ACES2065-1", display: "Rec.2020", view: "ACES 1.0 HDR-video - Rec.2020", direction: inverse}
+    from_scene_reference: !<GroupTransform>
+      children:
+        - !<DisplayViewTransform> {src: "ACES2065-1", display: "Rec.2020", view: "ACES 1.0 HDR-video - Rec.2020"}
+        - !<RangeTransform> {min_in_value: 0., min_out_value: 0., max_in_value: 1., max_out_value: 1.}
+        
+looks:
+  - !<Look>
+    name: Low Contrast
+    process_space: ACEScg
+    transform: !<GroupTransform>
+      children:
+        - !<CDLTransform> {slope: [0.18, 0.18, 0.18], direction: inverse}
+        - !<CDLTransform> {power: [0.85, 0.85, 0.85]}
+        - !<CDLTransform> {slope: [0.18, 0.18, 0.18]}
+
+  - !<Look>
+    name: Medium Low Contrast
+    process_space: ACEScg
+    transform: !<GroupTransform>
+      children:
+        - !<CDLTransform> {slope: [0.18, 0.18, 0.18], direction: inverse}
+        - !<CDLTransform> {power: [0.75, 0.75, 0.75]}
+        - !<CDLTransform> {slope: [0.18, 0.18, 0.18]}
+        
+  - !<Look>
+    name: Very Low Contrast
+    process_space: ACEScg
+    transform: !<GroupTransform>
+      children:
+        - !<CDLTransform> {slope: [0.18, 0.18, 0.18], direction: inverse}
+        - !<CDLTransform> {power: [0.55, 0.55, 0.55]}
+        - !<CDLTransform> {slope: [0.18, 0.18, 0.18]}
+
+  - !<Look>
+    name: High Contrast
+    process_space: ACEScg
+    transform: !<GroupTransform>
+      children:
+        - !<CDLTransform> {slope: [0.18, 0.18, 0.18], direction: inverse}
+        - !<CDLTransform> {power: [1.15, 1.15, 1.15]}
+        - !<CDLTransform> {slope: [0.18, 0.18, 0.18]}
+
+  - !<Look>
+    name: Medium High Contrast
+    process_space: ACEScg
+    transform: !<GroupTransform>
+      children:
+        - !<CDLTransform> {slope: [0.18, 0.18, 0.18], direction: inverse}
+        - !<CDLTransform> {power: [1.25, 1.25, 1.25]}
+        - !<CDLTransform> {slope: [0.18, 0.18, 0.18]}
+        
+  - !<Look>
+    name: Very High Contrast
+    process_space: ACEScg
+    transform: !<GroupTransform>
+      children:
+        - !<CDLTransform> {slope: [0.18, 0.18, 0.18], direction: inverse}
+        - !<CDLTransform> {power: [1.55, 1.55, 1.55]}
+        - !<CDLTransform> {slope: [0.18, 0.18, 0.18]}
+
