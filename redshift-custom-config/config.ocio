@@ -1,5 +1,5 @@
 # Redshift OCIO config for ACES Workflows & File Filtering by Saul Espinosa
-# Version 1.4 - Modified 11/15/2021 - Added HDR ST2084-P3-D65 and Rec.2100-PQ Views
+# Version 1.4 - Modified 12/21/2021 - Added HDR ST2084-P3-D65 and Rec.2100-PQ Views
 
 ocio_profile_version: 2
 
