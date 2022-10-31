@@ -132,6 +132,8 @@ looks:
         - !<CDLTransform> {power: [1.55, 1.55, 1.55], sat: 1.4}
         - !<CDLTransform> {slope: [0.18, 0.18, 0.18]}
 
+inactive_colorspaces: [ Display P3, BT.1886, AgX Base, AgX Base BT.1886, AgX Base Display P3 ]
+
 colorspaces:
   - !<ColorSpace>
     name: scene-linear Rec.709-sRGB
@@ -141,6 +143,7 @@ colorspaces:
     bitdepth: unknown
     description: Open Domain Linear BT.709 Tristimulus
     isdata: false
+    categories: [ file-io, working-space ]
     allocation: uniform
 
   - !<ColorSpace>
@@ -151,6 +154,8 @@ colorspaces:
     bitdepth: unknown
     description: AgX Log, (Kraken)
     isdata: false
+    categories: [ file-io ]
+    encoding: log
     allocation: uniform
     from_scene_reference: !<GroupTransform>
       children:
@@ -166,6 +171,7 @@ colorspaces:
     bitdepth: unknown
     description: 2.2 Exponent EOTF Encoding
     isdata: false
+    categories: [ file-io ]
     allocation: uniform
     from_scene_reference: !<ExponentTransform> {value: 2.2, direction: inverse}
 
@@ -177,6 +183,7 @@ colorspaces:
     bitdepth: unknown
     description: 2.4 Exponent EOTF Encoding
     isdata: false
+    categories: [ file-io ]
     allocation: uniform
     from_scene_reference: !<ExponentTransform> {value: 2.4, direction: inverse}
 
@@ -187,6 +194,7 @@ colorspaces:
     bitdepth: unknown
     description: sRGB IEC 61966-2-1 2.2 Exponent Reference EOTF Display
     isdata: false
+    categories: [ file-io ]
     allocation: uniform
     from_scene_reference: !<GroupTransform>
       children:
@@ -200,6 +208,7 @@ colorspaces:
     bitdepth: unknown
     description: Display P3 2.2 Exponent EOTF Display
     isdata: false
+    categories: [ file-io, working-space, scene_linear_working_space ]
     allocation: uniform
     from_scene_reference: !<GroupTransform>
       children:
@@ -213,6 +222,7 @@ colorspaces:
     bitdepth: unknown
     description: BT.1886 2.4 Exponent EOTF Display
     isdata: false
+    categories: [ file-io, working-space, scene_linear_working_space ]
     allocation: uniform
     from_scene_reference: !<ColorSpaceTransform> {src: scene-linear Rec.709-sRGB, dst: 2.4 EOTF Encoding}
 
@@ -223,6 +233,7 @@ colorspaces:
     bitdepth: unknown
     description: AgX Base Image Encoding
     isdata: false
+    categories: [ file-io ]
     allocation: uniform
     from_scene_reference: !<GroupTransform>
       children:
@@ -263,4 +274,5 @@ colorspaces:
     bitdepth: unknown
     description: Generic data encoding
     isdata: true
+    categories: [ file-io ]
     allocation: uniform
