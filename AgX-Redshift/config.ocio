@@ -101,7 +101,7 @@ looks:
     process_space: AgX Base
     transform: !<GroupTransform>
       children:
-       - !<CDLTransform> {slope: [0.18, 0.18, 0.18], direction: inverse}
+        - !<CDLTransform> {slope: [0.18, 0.18, 0.18], direction: inverse}
         - !<CDLTransform> {power: [0.55, 0.55, 0.55], sat: 1.4}
         - !<CDLTransform> {slope: [0.18, 0.18, 0.18]}
 
