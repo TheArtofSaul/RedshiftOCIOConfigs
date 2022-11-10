@@ -241,10 +241,8 @@ colorspaces:
 
 looks:
   - !<Look>
-    name: ACES 1.3 Reference Gamut Compression
-    process_space: ACES2065-1
+    name: ACES-LMT - Blue light artifact fix
     description: |
-      LMT (applied in ACES2065-1) to compress scene-referred values from common cameras into the AP1 gamut
-      
-      ACEStransformID: urn:ampas:aces:transformId:v1.5:LMT.Academy.GamutCompress.a1.3.0
-    transform: !<BuiltinTransform> {style: ACES-LMT - ACES 1.3 Reference Gamut Compression}
+      LMT for desaturating blue hues to reduce clipping artifacts
+    process_space: ACES2065-1
+    transform: !<BuiltinTransform> {style: "ACES-LMT - BLUE_LIGHT_ARTIFACT_FIX"}
