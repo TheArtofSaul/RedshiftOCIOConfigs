@@ -1,5 +1,5 @@
 # Modified Redshift OCIO config for AgX Workflows & File Filtering by Saul Espinosa based on Troy Sobotka's AgX work.
-# Version 1.0 - Modified 10/31/2022
+# Version 1.1 - Modified 01/31/2023
 
 ocio_profile_version: 2
 
@@ -11,14 +11,9 @@ luma: [0.2126, 0.7152, 0.0722]
 
 roles:
   color_picking: sRGB
-  color_timing: sRGB
-  compositing_log: AgX Log (Kraken)
   data: Raw
   default: sRGB
-  matte_paint: sRGB
-  reference: scene-linear Rec.709-sRGB
   scene_linear: scene-linear Rec.709-sRGB
-  texture_paint: sRGB
 
 file_rules:
   - !<Rule> {name: albedo, colorspace: sRGB, regex: ".*[^a-zA-Z0-9]([aA]lbedo|[dD]iffuse|[cC]olor|[bB]ase.?[cC]olor).*"}
@@ -34,103 +29,44 @@ file_rules:
 
 displays:
   sRGB:
-    - !<View> {name: Display Native, colorspace: sRGB}
+    - !<View> {name: AgX Punchy, colorspace: AgX Base, look: Punchy}
+    - !<View> {name: Un-tone-mapped, colorspace: sRGB}
     - !<View> {name: AgX, colorspace: AgX Base}
-    - !<View> {name: AgX Low Contrast, colorspace: AgX Base, look: +Low Contrast}
-    - !<View> {name: AgX Medium Low Contrast, colorspace: AgX Base, look: +Medium Low Contrast}
-    - !<View> {name: AgX Very Low Contrast, colorspace: AgX Base, look: +Very Low Contrast}
-    - !<View> {name: AgX High Contrast, colorspace: AgX Base, look: +High Contrast}
-    - !<View> {name: AgX Medium High Contrast, colorspace: AgX Base, look: +Medium High Contrast}
-    - !<View> {name: AgX Very High Contrast, colorspace: AgX Base, look: +Very High Contrast}
+    - !<View> {name: AgX Low Contrast, colorspace: AgX Base, look: Low Contrast}
+    - !<View> {name: AgX Medium Low Contrast, colorspace: AgX Base, look: Medium Low Contrast}
+    - !<View> {name: AgX Very Low Contrast, colorspace: AgX Base, look: Very Low Contrast}
+    - !<View> {name: AgX High Contrast, colorspace: AgX Base, look: High Contrast}
+    - !<View> {name: AgX Medium High Contrast, colorspace: AgX Base, look: Medium High Contrast}
+    - !<View> {name: AgX Very High Contrast, colorspace: AgX Base, look: Very High Contrast}
     - !<View> {name: Raw, colorspace: Raw}
     - !<View> {name: AgX Log, colorspace: AgX Log (Kraken)}
   Display P3:
-    - !<View> {name: Display Native, colorspace: Display P3}
+    - !<View> {name: AgX Punchy, colorspace: AgX Base Display P3, look: Punchy}
+    - !<View> {name: Un-tone-mapped, colorspace: Display P3}
     - !<View> {name: AgX, colorspace: AgX Base Display P3}
-    - !<View> {name: AgX Low Contrast, colorspace: AgX Base Display P3, look: +Low Contrast}
-    - !<View> {name: AgX Medium Low Contrast, colorspace: AgX Base Display P3, look: +Medium Low Contrast}
-    - !<View> {name: AgX Very Low Contrast, colorspace: AgX Base Display P3, look: +Very Low Contrast}
-    - !<View> {name: AgX High Contrast, colorspace: AgX Base Display P3, look: +High Contrast}
-    - !<View> {name: AgX Medium High Contrast, colorspace: AgX Base Display P3, look: +Medium High Contrast}
-    - !<View> {name: AgX Very High Contrast, colorspace: AgX Base Display P3, look: +Very High Contrast} 
+    - !<View> {name: AgX Low Contrast, colorspace: AgX Base Display P3, look: Low Contrast}
+    - !<View> {name: AgX Medium Low Contrast, colorspace: AgX Base Display P3, look: Medium Low Contrast}
+    - !<View> {name: AgX Very Low Contrast, colorspace: AgX Base Display P3, look: Very Low Contrast}
+    - !<View> {name: AgX High Contrast, colorspace: AgX Base Display P3, look: High Contrast}
+    - !<View> {name: AgX Medium High Contrast, colorspace: AgX Base Display P3, look: Medium High Contrast}
+    - !<View> {name: AgX Very High Contrast, colorspace: AgX Base Display P3, look: Very High Contrast} 
     - !<View> {name: Raw, colorspace: Raw}
     - !<View> {name: AgX Log, colorspace: AgX Log (Kraken)}   
   BT.1886:
-    - !<View> {name: Display Native, colorspace: BT.1886}
+    - !<View> {name: AgX Punchy, colorspace: AgX Base BT.1886, look: Punchy}
+    - !<View> {name: Un-tone-mapped, colorspace: BT.1886}
     - !<View> {name: AgX, colorspace: AgX Base BT.1886}
-    - !<View> {name: AgX Low Contrast, colorspace: AgX Base BT.1886, look: +Low Contrast}
-    - !<View> {name: AgX Medium Low Contrast, colorspace: AgX Base BT.1886, look: +Medium Low Contrast}
-    - !<View> {name: AgX Very Low Contrast, colorspace: AgX Base BT.1886, look: +Very Low Contrast}
-    - !<View> {name: AgX High Contrast, colorspace: AgX Base BT.1886, look: +High Contrast}
-    - !<View> {name: AgX Medium High Contrast, colorspace: AgX Base BT.1886, look: +Medium High Contrast}
-    - !<View> {name: AgX Very High Contrast, colorspace: AgX Base BT.1886, look: +Very High Contrast}
+    - !<View> {name: AgX Low Contrast, colorspace: AgX Base BT.1886, look: Low Contrast}
+    - !<View> {name: AgX Medium Low Contrast, colorspace: AgX Base BT.1886, look: Medium Low Contrast}
+    - !<View> {name: AgX Very Low Contrast, colorspace: AgX Base BT.1886, look: Very Low Contrast}
+    - !<View> {name: AgX High Contrast, colorspace: AgX Base BT.1886, look: High Contrast}
+    - !<View> {name: AgX Medium High Contrast, colorspace: AgX Base BT.1886, look: Medium High Contrast}
+    - !<View> {name: AgX Very High Contrast, colorspace: AgX Base BT.1886, look: Very High Contrast}
     - !<View> {name: Raw, colorspace: Raw}
     - !<View> {name: AgX Log, colorspace: AgX Log (Kraken)}
 
 active_displays: []
 active_views: []
-
-looks:
-
-  - !<Look>
-    name: Punchy
-    process_space: AgX Base
-    description: A punchy and more chroma laden look
-    transform: !<CDLTransform> {power: [1.35, 1.35, 1.35], sat: 1.4}
-
-  - !<Look>
-    name: Low Contrast
-    process_space: AgX Base
-    transform: !<GroupTransform>
-      children:
-        - !<CDLTransform> {slope: [0.18, 0.18, 0.18], direction: inverse}
-        - !<CDLTransform> {power: [0.85, 0.85, 0.85], sat: 1.4}
-        - !<CDLTransform> {slope: [0.18, 0.18, 0.18]}
-
-  - !<Look>
-    name: Medium Low Contrast
-    process_space: AgX Base
-    transform: !<GroupTransform>
-      children:
-        - !<CDLTransform> {slope: [0.18, 0.18, 0.18], direction: inverse}
-        - !<CDLTransform> {power: [0.75, 0.75, 0.75], sat: 1.4}
-        - !<CDLTransform> {slope: [0.18, 0.18, 0.18]}
-        
-  - !<Look>
-    name: Very Low Contrast
-    process_space: AgX Base
-    transform: !<GroupTransform>
-      children:
-        - !<CDLTransform> {slope: [0.18, 0.18, 0.18], direction: inverse}
-        - !<CDLTransform> {power: [0.55, 0.55, 0.55], sat: 1.4}
-        - !<CDLTransform> {slope: [0.18, 0.18, 0.18]}
-
-  - !<Look>
-    name: High Contrast
-    process_space: AgX Base
-    transform: !<GroupTransform>
-      children:
-        - !<CDLTransform> {slope: [0.18, 0.18, 0.18], direction: inverse}
-        - !<CDLTransform> {power: [1.15, 1.15, 1.15], sat: 1.4}
-        - !<CDLTransform> {slope: [0.18, 0.18, 0.18]}
-
-  - !<Look>
-    name: Medium High Contrast
-    process_space: AgX Base
-    transform: !<GroupTransform>
-      children:
-        - !<CDLTransform> {slope: [0.18, 0.18, 0.18], direction: inverse}
-        - !<CDLTransform> {power: [1.25, 1.25, 1.25], sat: 1.4}
-        - !<CDLTransform> {slope: [0.18, 0.18, 0.18]}
-        
-  - !<Look>
-    name: Very High Contrast
-    process_space: AgX Base
-    transform: !<GroupTransform>
-      children:
-        - !<CDLTransform> {slope: [0.18, 0.18, 0.18], direction: inverse}
-        - !<CDLTransform> {power: [1.55, 1.55, 1.55], sat: 1.4}
-        - !<CDLTransform> {slope: [0.18, 0.18, 0.18]}
 
 inactive_colorspaces: [ Display P3, BT.1886, AgX Base, AgX Base BT.1886, AgX Base Display P3 ]
 
@@ -276,3 +212,41 @@ colorspaces:
     isdata: true
     categories: [ file-io ]
     allocation: uniform
+
+looks:
+
+  - !<Look>
+    name: Punchy
+    process_space: AgX Base
+    description: A punchy and more chroma laden look
+    transform: !<CDLTransform> {power: [1.35, 1.35, 1.35], sat: 1.4}
+
+  - !<Look>
+    name: Low Contrast
+    process_space: AgX Base
+    transform: !<CDLTransform> {power: [0.85, 0.85, 0.85], sat: 1.8}
+
+  - !<Look>
+    name: Medium Low Contrast
+    process_space: AgX Base
+    transform: !<CDLTransform> {power: [0.75, 0.75, 0.75], sat: 1.8}
+        
+  - !<Look>
+    name: Very Low Contrast
+    process_space: AgX Base
+    transform: !<CDLTransform> {power: [0.55, 0.55, 0.55], sat: 1.8}
+
+  - !<Look>
+    name: High Contrast
+    process_space: AgX Base
+    transform: !<CDLTransform> {power: [1.15, 1.15, 1.15], sat: 1.8}
+
+  - !<Look>
+    name: Medium High Contrast
+    process_space: AgX Base
+    transform: !<CDLTransform> {power: [1.25, 1.25, 1.25], sat: 1.8}
+        
+  - !<Look>
+    name: Very High Contrast
+    process_space: AgX Base
+    transform: !<CDLTransform> {power: [1.55, 1.55, 1.55], sat: 1.8}
