@@ -1,12 +1,13 @@
 # Modified Redshift OCIO config for AgX Workflows & File Filtering by Saul Espinosa based on Troy Sobotka's AgX work.
-# Version 1.1 - Modified 01/31/2023
+# Added the new Blender 4 AGX Contrast Looks
+# Version 1.5 - Modified 09/22/2023
 
 ocio_profile_version: 2
 
 environment:
   {}
 search_path: LUTs
-strictparsing: true
+strictparsing: true  
 luma: [0.2126, 0.7152, 0.0722]
 
 roles:
@@ -215,38 +216,79 @@ colorspaces:
 
 looks:
 
-  - !<Look>
+#  - !<Look>
     name: Punchy
     process_space: AgX Base
     description: A punchy and more chroma laden look
-    transform: !<CDLTransform> {power: [1.35, 1.35, 1.35], sat: 1.4}
+    transform: !<GroupTransform>
+      children:
+        - !<GradingPrimaryTransform>
+          style: log
+          contrast: {rgb: [1, 1, 1], master: 1}
+          pivot: {contrast: -0.2}
 
   - !<Look>
     name: Low Contrast
     process_space: AgX Base
-    transform: !<CDLTransform> {power: [0.85, 0.85, 0.85], sat: 1.8}
+    transform: !<GroupTransform>
+      children:
+        - !<GradingPrimaryTransform>
+          style: log
+          contrast: {rgb: [0.8, 0.8, 0.8], master: 1}
+          saturation: 1.1
+          pivot: {contrast: -0.2}
 
   - !<Look>
     name: Medium Low Contrast
     process_space: AgX Base
-    transform: !<CDLTransform> {power: [0.75, 0.75, 0.75], sat: 1.8}
+    transform: !<GroupTransform>
+      children:
+        - !<GradingPrimaryTransform>
+          style: log
+          contrast: {rgb: [0.9, 0.9, 0.9], master: 1}
+          saturation: 1.05
+          pivot: {contrast: -0.2}
         
   - !<Look>
     name: Very Low Contrast
     process_space: AgX Base
-    transform: !<CDLTransform> {power: [0.55, 0.55, 0.55], sat: 1.8}
+    transform: !<GroupTransform>
+      children:
+        - !<GradingPrimaryTransform>
+          style: log
+          contrast: {rgb: [0.7, 0.7, 0.7], master: 1}
+          saturation: 1.15
+          pivot: {contrast: -0.2}
 
   - !<Look>
     name: High Contrast
     process_space: AgX Base
-    transform: !<CDLTransform> {power: [1.15, 1.15, 1.15], sat: 1.8}
+    transform: !<GroupTransform>
+      children:
+        - !<GradingPrimaryTransform>
+          style: log
+          contrast: {rgb: [1.4, 1.4, 1.4], master: 1}
+          saturation: 0.95
+          pivot: {contrast: -0.2}
 
   - !<Look>
     name: Medium High Contrast
     process_space: AgX Base
-    transform: !<CDLTransform> {power: [1.25, 1.25, 1.25], sat: 1.8}
+    transform: !<GroupTransform>
+      children:
+        - !<GradingPrimaryTransform>
+          style: log
+          contrast: {rgb: [1.2, 1.2, 1.2], master: 1}
+          saturation: 1
+          pivot: {contrast: -0.2}
         
   - !<Look>
     name: Very High Contrast
     process_space: AgX Base
-    transform: !<CDLTransform> {power: [1.55, 1.55, 1.55], sat: 1.8}
+    transform: !<GroupTransform>
+      children:
+        - !<GradingPrimaryTransform>
+          style: log
+          contrast: {rgb: [1.57, 1.57, 1.57], master: 1}
+          saturation: 0.9
+          pivot: {contrast: -0.2}
