@@ -14,7 +14,7 @@
 # See ocio-license.txt for details.
 
 # Modified Redshift OCIO config for AgX Workflows & File Filtering by Saul Espinosa based on the new Blender 4 OCIO config.
-# Version 1.0 - Modified 09/22/2023
+# Version 1.0 - Modified 02/23/2024
 
 ocio_profile_version: 2
 
@@ -26,7 +26,7 @@ description: Modified Blender 4 OCIO config for Redshift Support
 
 roles:
 # Remove rendering line if you want to expose all the rendering working spaces like ACEScg, Rec.2020 etc.
-  rendering: scene-linear Rec.709-sRGB
+#  rendering: scene-linear Rec.709-sRGB
   reference: Linear CIE-XYZ E
   scene_linear: scene-linear Rec.709-sRGB
   color_picking: sRGB
@@ -41,6 +41,9 @@ roles:
   texture_paint: scene-linear Rec.709-sRGB
 
 file_rules:
+  - !<Rule> {name: _acescg, extension: "*", pattern: "*_acescg", colorspace: ACEScg}
+  - !<Rule> {name: _srgb, extension: "*", pattern: "*_srgb", colorspace: sRGB}
+  - !<Rule> {name: _raw, extension: "*", pattern: "*_raw", colorspace: Raw}
   - !<Rule> {name: albedo, colorspace: sRGB, regex: ".*[^a-zA-Z0-9]([aA]lbedo|[dD]iffuse|[cC]olor|[bB]ase.?[cC]olor).*"}
   - !<Rule> {name: data, colorspace: Raw, regex: ".*[^a-zA-Z0-9]([aA]ces|[nN]ormal|[mM]etal|[rR]ough|[hH]eight|[bB]ump|[dD]isplace|(ior|IOR)[^a-zA-Z]|[rR]eflect|[sS]pec|[oO]pacity|(sss|SSS)[^a-zA-Z]|[gG]loss|[aA]mbient.?[oO]cclusion|[aA][oO][^a-zA-Z]).*"}
   - !<Rule> {name: exr, extension: exr, pattern: "*", colorspace: scene-linear Rec.709-sRGB}
