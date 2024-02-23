@@ -10,9 +10,22 @@ search_path:
 environment: {}
 
 file_rules:
-  - !<Rule> {name: exr, extension: exr, pattern: "*", colorspace: Raw}
-  - !<Rule> {name: hdr, extension: hdr, pattern: "*", colorspace: Raw}
+  - !<Rule> {name: _acescg, extension: "*", pattern: "*_acescg", colorspace: ACEScg}
+  - !<Rule> {name: _srgb, extension: "*", pattern: "*_srgb", colorspace: sRGB}
+  - !<Rule> {name: _raw, extension: "*", pattern: "*_raw", colorspace: Raw}
+  - !<Rule> {name: albedo, colorspace: sRGB, regex: ".*[^a-zA-Z0-9]([aA]lbedo|[dD]iffuse|[cC]olor|[bB]ase.?[cC]olor).*"}
+  - !<Rule> {name: data, colorspace: Raw, regex: ".*[^a-zA-Z0-9]([aA]ces|[nN]ormal|[mM]etal|[rR]ough|[hH]eight|[bB]ump|[dD]isplace|(ior|IOR)[^a-zA-Z]|[rR]eflect|[sS]pec|[oO]pacity|(sss|SSS)[^a-zA-Z]|[gG]loss|[aA]mbient.?[oO]cclusion|[aA][oO][^a-zA-Z]).*"}
+  - !<Rule> {name: logC, colorspace: ARRI LogC / AlexaWideGamut, pattern: "*LogC*", extension: "*"}
+  - !<Rule> {name: SLog3, colorspace: Sony SLog3 / SGamut3, pattern: "*SLog*", extension: "*"}
+  - !<Rule> {name: v-log, colorspace: Panasonic V-Log / V-Gamut, pattern: "*V-Log*", extension: "*"}
+  - !<Rule> {name: adx, colorspace: Log film scan (ADX10), pattern: "*adx*", extension: "*"}
+  - !<Rule> {name: exr, extension: exr, pattern: "*", colorspace: scene-linear Rec.709-sRGB}
+  - !<Rule> {name: hdr, extension: hdr, pattern: "*", colorspace: scene-linear Rec.709-sRGB}
   - !<Rule> {name: tx, extension: tx, pattern: "*", colorspace: Raw}
+  - !<Rule> {name: png, extension: png, pattern: "*", colorspace: sRGB}
+  - !<Rule> {name: psd, extension: psd, pattern: "*", colorspace: sRGB}
+  - !<Rule> {name: jpeg, colorspace: sRGB, regex: ".*\\.[jJ]pe?g$"}
+  - !<Rule> {name: tiff, colorspace: sRGB, regex: ".*\\.[tT]if?f$"}
   - !<Rule> {name: Default, colorspace: default}
 
 roles:
@@ -58,9 +71,7 @@ displays:
   AdobeRGB:
     - !<Views> [ ACES 1.0 SDR-video - ACES 1.3 Reference Gamut Compression, ACES 1.0 SDR-video, Un-tone-mapped, Log, Raw]
 
-default_view_transform: Un-tone-mapped
-
-view_transforms:
+view_transforms: ACES 1.0 SDR-video
 
 - !<ViewTransform>
     name: Un-tone-mapped
@@ -121,6 +132,7 @@ display_colorspaces:
 
   - !<ColorSpace>
     name: sRGB
+    aliases: [sRGB 2.2, sRGB I-D65, srgb_display, sRGB - Display, g22_rec709, Utility - Gamma 2.2 - Rec.709 - Texture, Utility - sRGB - Texture, sRGB - Texture, srgb_tx, srgb_texture, Input - Generic - sRGB - Texture, "sRGB Display: 2.2 Gamma - Rec.709"]
     family:
     description: |
       sRGB monitor (piecewise EOTF)
@@ -161,7 +173,7 @@ display_colorspaces:
 
   - !<ColorSpace>
     name: Rec.2020
-    aliases: [rec1886_rec2020_display]
+    aliases: [BT.2020, BT.2020 2.4, BT.2020 I-D65, Rec.1886 / Rec.2020 Video - Display, rec1886_rec2020_video_display, Rec.1886 Rec.2020 - Display, rec1886_rec2020_display, "Rec1886: 2.4 Gamma - Rec.2020"]
     family: Display
     equalitygroup: ""
     bitdepth: 32f
@@ -243,6 +255,7 @@ colorspaces:
   # ACEScg is listed first to make default
   - !<ColorSpace>
     name: ACEScg
+    aliases: [Linear ACEScg, lin_ap1, ACES - ACEScg, "ACEScg: Linear - AP1"]
     family: ACES
     equalitygroup: ""
     bitdepth: 32f
@@ -255,6 +268,7 @@ colorspaces:
 
   - !<ColorSpace>
     name: ACES2065-1
+    aliases: [Linear ACES, aces2065_1, ACES - ACES2065-1, lin_ap0, "ACES: Linear - AP0"]
     family: ACES
     equalitygroup: ""
     bitdepth: 32f
@@ -266,7 +280,8 @@ colorspaces:
 
   - !<ColorSpace>
     name: scene-linear Rec.709-sRGB
-    family: 
+    aliases: [Linear, Linear Rec.709, Linear BT.709, Linear BT.709 I-D65, Linear Tristimulus, linrec709, Utility - Linear - sRGB, Utility - Linear - Rec.709, lin_srgb, Linear Rec.709 (sRGB), lin_rec709_srgb, lin_rec709, lin_srgb, "CGI: Linear - Rec.709"]
+    family: Linear
     equalitygroup: ""
     bitdepth: 32f
     description: |
@@ -278,7 +293,8 @@ colorspaces:
 
   - !<ColorSpace>
     name: scene-linear DCI-P3 D65
-    family: 
+    aliases: [Linear DCI-P3 I-D65, Linear P3-D65, lin_p3d65, Utility - Linear - P3-D65, Linear DCI-P3 D65, Apple DCI-P3 D65]
+    family: Linear
     equalitygroup: ""
     bitdepth: 32f
     description: |
@@ -290,7 +306,8 @@ colorspaces:
 
   - !<ColorSpace>
     name: scene-linear Rec.2020
-    family: 
+    aliases: [Linear BT.2020 I-D65, Linear BT.2020, lin_rec2020, Linear Rec.2020, Utility - Linear - Rec.2020]
+    family: Linear
     equalitygroup: ""
     bitdepth: 32f
     description: |
@@ -302,7 +319,8 @@ colorspaces:
 
   - !<ColorSpace>
     name: Raw
-    family: 
+    aliases: [Generic Data, Non-Colour Data, Non-Color, Utility - Raw]
+    family: Data
     equalitygroup: ""
     bitdepth: 32f
     description: |
