@@ -71,7 +71,9 @@ displays:
   AdobeRGB:
     - !<Views> [ ACES 1.0 SDR-video - ACES 1.3 Reference Gamut Compression, ACES 1.0 SDR-video, Un-tone-mapped, Log, Raw]
 
-view_transforms: ACES 1.0 SDR-video
+default_view_transform:
+
+view_transforms:
 
 - !<ViewTransform>
     name: Un-tone-mapped
