@@ -373,6 +373,21 @@ colorspaces:
         - !<DisplayViewTransform> {src: "ACES2065-1", display: "sRGB", view: "ACES 1.0 SDR-video"}
         - !<RangeTransform> {min_in_value: 0., min_out_value: 0., max_in_value: 1., max_out_value: 1.}
 
+  - !<ColorSpace>
+    name: Invert ACES 2.0 SDR-video
+    family: ACES
+    bitdepth: 32f
+    description: |
+      Invert Display Transform for ACES 2.0 SDR-video
+    isdata: false
+    categories: [ file-io ]
+    encoding: sdr-video
+    to_scene_reference: !<DisplayViewTransform> {src: "ACES2065-1", display: "sRGB", view: "ACES 2.0 SDR-video", direction: inverse}
+    from_scene_reference: !<GroupTransform>
+      children:
+        - !<DisplayViewTransform> {src: "ACES2065-1", display: "sRGB", view: "ACES 2.0 SDR-video"}
+        - !<RangeTransform> {min_in_value: 0., min_out_value: 0., max_in_value: 1., max_out_value: 1.}
+
 looks:
   - !<Look>
     name: ACES 1.3 Reference Gamut Compression
